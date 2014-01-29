@@ -1,0 +1,30 @@
+{
+  "name": "readline2",
+  "version": "0.1.0",
+  "description": "Readline Façade fixing bugs and issues found in releases 0.8 and 0.10",
+  "main": "readline.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/SBoudrias/readline2.git"
+  },
+  "keywords": [
+    "cli",
+    "terminal",
+    "readline",
+    "tty"
+  ],
+  "author": "Simon Boudrias <admin@simonboudrias.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SBoudrias/readline2/issues"
+  },
+  "homepage": "https://github.com/SBoudrias/readline2",
+  "dependencies": {
+    "mute-stream": "0.0.4",
+    "lodash": "~2.4.1",
+    "cli-color": "~0.2.3"
+  }
+}
