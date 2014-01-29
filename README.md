@@ -11,7 +11,14 @@ This project is extracted from the core of [Inquirer.js interactive prompt inter
 Documentation
 -------------
 
-Coming Soon!
+### readline2.createInterface( options ); -> {Interface}
+
+Present the same API as [node.js readline.createInterface()](http://nodejs.org/api/readline.html)
+
+#### Improvements
+- Default `options.input` as `process.stdin`
+- Default `options.output` as `process.stdout`
+- `interface.stdout` is wrapped in a [MuteStream](https://github.com/isaacs/mute-stream)
 
 
 License
