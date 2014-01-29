@@ -3,6 +3,7 @@ var rawReadline = require("readline");
 var readline2 = require("..");
 var _ = require("lodash");
 var through2 = require("through2");
+var chalk = require("chalk");
 
 /**
  * Assert an Object implements an interface
@@ -23,24 +24,10 @@ assert.implement = function (subject, methods) {
   assert.ok(pass.length === 0, "expected object to implement the complete interface");
 };
 
-function getDummyStream() {
-  var content = new Buffer("");
-  var stream = through2(function( chunk ) {
-    content.write( chunk );
-  });
-  stream.content = content;
-  return stream;
-}
-
 
 describe("Readline2", function() {
   beforeEach(function() {
-    this.input = getDummyStream();
-    this.output = getDummyStream();
-    this.rl = readline2.createInterface({
-      input: this.input,
-      output: this.output
-    });
+    this.rl = readline2.createInterface();
   });
 
   it("returns an interface", function() {
@@ -50,16 +37,31 @@ describe("Readline2", function() {
     assert.implement( interface2, interface );
   });
 
-  it("transform interface.output as a MuteStream", function() {
+  it("transform interface.output as a MuteStream", function( done ) {
     var expected = [ "foo", "lab" ];
     this.rl.output.on("data", function( chunk ) {
       assert.equal( chunk, expected.shift() );
     });
+    this.rl.output.on("end", function() { done(); });
 
     this.rl.write("foo");
     this.rl.output.mute();
     this.rl.write("bar");
     this.rl.output.unmute();
     this.rl.write("lab");
+    this.rl.output.end();
+  });
+
+  // FIXME: When line is refreshed, ANSI deleted char are printed, we'd need to get
+  // rid of those to compare the result
+  xit("escape ANSI character in prompt", function() {
+    var content = "";
+    this.rl.output.on("data", function( chunk ) {
+      content += chunk.toString();
+    });
+    this.rl.setPrompt(chalk.red("readline2> "));
+    this.rl.output.emit("resize");
+    this.rl.write("answer");
+    assert.equal( content, "\x1b[31mreadline2> \x1b[39manswer" );
   });
 });
