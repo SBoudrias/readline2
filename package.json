@@ -25,11 +25,9 @@
   "dependencies": {
     "mute-stream": "0.0.4",
     "lodash": "~2.4.1",
-    "cli-color": "~0.2.3",
     "chalk": "~0.4.0"
   },
   "devDependencies": {
-    "through2": "~0.4.1",
     "sinon": "~1.7.3"
   }
 }

@@ -7,7 +7,7 @@
 var _ = require("lodash");
 var readline = require("readline");
 var MuteStream = require("mute-stream");
-var ansiTrim = require("cli-color/lib/trim");
+var chalk = require("chalk");
 
 
 /**
@@ -52,7 +52,7 @@ Interface.createInterface = function( opt ) {
   rl._getCursorPos = function() {
     var columns = this.columns;
     var strBeforeCursor = this._prompt + this.line.substring(0, this.cursor);
-    var dispPos = this._getDisplayPos(ansiTrim(strBeforeCursor));
+    var dispPos = this._getDisplayPos(chalk.stripColor(strBeforeCursor));
     var cols = dispPos.cols;
     var rows = dispPos.rows;
     // If the cursor is on a full-width character which steps over the line,
@@ -71,7 +71,7 @@ Interface.createInterface = function( opt ) {
     var offset = 0;
     var col = this.columns;
     var code;
-    str = ansiTrim(str);
+    str = chalk.stripColor(str);
     for (var i = 0, len = str.length; i < len; i++) {
       code = codePointAt(str, i);
       if (code >= 0x10000) { // surrogates

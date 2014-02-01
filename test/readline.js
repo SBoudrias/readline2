@@ -2,7 +2,6 @@ var assert = require("assert");
 var rawReadline = require("readline");
 var readline2 = require("..");
 var _ = require("lodash");
-var through2 = require("through2");
 var chalk = require("chalk");
 var sinon = require("sinon");
 
