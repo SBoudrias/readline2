@@ -11,6 +11,8 @@ This project is extracted from the core of [Inquirer.js interactive prompt inter
 Documentation
 -------------
 
+**Installation**: `npm install --save readline2`
+
 ### readline2.createInterface( options ); -> {Interface}
 
 Present the same API as [node.js readline.createInterface()](http://nodejs.org/api/readline.html)
@@ -20,6 +22,7 @@ Present the same API as [node.js readline.createInterface()](http://nodejs.org/a
 - Default `options.output` as `process.stdout`
 - `interface.stdout` is wrapped in a [MuteStream](https://github.com/isaacs/mute-stream)
 - Prevent `up` and `down` keys from moving through history inside the readline
+- Fix cursor position after a line refresh when the `Interface` prompt contains ANSI colors
 
 
 License
