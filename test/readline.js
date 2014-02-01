@@ -4,6 +4,7 @@ var readline2 = require("..");
 var _ = require("lodash");
 var through2 = require("through2");
 var chalk = require("chalk");
+var sinon = require("sinon");
 
 /**
  * Assert an Object implements an interface
@@ -63,5 +64,14 @@ describe("Readline2", function() {
     this.rl.output.emit("resize");
     this.rl.write("answer");
     assert.equal( content, "\x1b[31mreadline2> \x1b[39manswer" );
+  });
+
+  it("doesn\'t write up and down arrow", function() {
+    this.rl._historyPrev = sinon.spy();
+    this.rl._historyNext = sinon.spy();
+    process.stdin.emit("keypress", null, { name: "up" });
+    process.stdin.emit("keypress", null, { name: "down" });
+    assert( this.rl._historyPrev.notCalled );
+    assert( this.rl._historyNext.notCalled );
   });
 });
