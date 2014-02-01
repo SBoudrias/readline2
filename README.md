@@ -1,4 +1,4 @@
-readline2
+readline2 [![Build Status](https://secure.travis-ci.org/SBoudrias/readline2.png?branch=master)](http://travis-ci.org/SBoudrias/readline2)
 =========
 
 Node.js (v0.8 and v0.10) had some bugs and issues with the default [Readline](http://nodejs.org/api/readline.html) module.
