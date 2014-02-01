@@ -53,17 +53,11 @@ describe("Readline2", function() {
     this.rl.output.end();
   });
 
-  // FIXME: When line is refreshed, ANSI deleted char are printed, we'd need to get
-  // rid of those to compare the result
-  xit("escape ANSI character in prompt", function() {
-    var content = "";
-    this.rl.output.on("data", function( chunk ) {
-      content += chunk.toString();
-    });
+  it("position the cursor at the expected emplacement when the prompt contains ANSI control chars", function() {
     this.rl.setPrompt(chalk.red("readline2> "));
     this.rl.output.emit("resize");
     this.rl.write("answer");
-    assert.equal( content, "\x1b[31mreadline2> \x1b[39manswer" );
+    assert.equal( this.rl._getCursorPos().cols, 17 );
   });
 
   it("doesn\'t write up and down arrow", function() {
