@@ -1,9 +1,8 @@
 var assert = require("assert");
 var rawReadline = require("readline");
-var readline2 = require("..");
-var _ = require("lodash");
 var chalk = require("chalk");
 var sinon = require("sinon");
+var readline2 = require("../");
 
 /**
  * Assert an Object implements an interface
@@ -12,13 +11,13 @@ var sinon = require("sinon");
  */
 
 assert.implement = function (subject, methods) {
-  methods = _.isArray(methods) ? methods : Object.keys(methods).filter(function (method) {
-    return _.isFunction(methods[method]);
+  methods = Array.isArray(methods) ? methods : Object.keys(methods).filter(function (method) {
+    return typeof methods[method] === 'function';
   });
 
   var pass = methods.filter(function (method) {
-    assert(_.isFunction(subject[method]), "expected subject to implement `" + method + "`");
-    return !_.isFunction(subject[method]);
+    assert(typeof subject[method] === 'function', "expected subject to implement `" + method + "`");
+    return typeof subject[method] !== 'function';
   });
 
   assert.ok(pass.length === 0, "expected object to implement the complete interface");
