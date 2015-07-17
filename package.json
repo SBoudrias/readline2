@@ -1,6 +1,6 @@
 {
   "name": "readline2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Readline Façade fixing bugs and issues found in releases 0.8 and 0.10",
   "scripts": {
     "test": "mocha -R spec"
