@@ -6,14 +6,8 @@
 "use strict";
 var readline = require("readline");
 var MuteStream = require("mute-stream");
-var stripAnsi = require("strip-ansi");
 var codePointAt = require("code-point-at");
 var isFullwidthCodePoint = require("is-fullwidth-code-point");
-
-
-/**
- * Module export
- */
 
 var Interface = module.exports = {};
 
@@ -73,12 +67,18 @@ Interface.createInterface = function( opt ) {
   rl._getDisplayPos = function(str) {
     var offset = 0;
     var col = this.columns;
+    var row = 0;
     var code;
-    str = stripAnsi(str);
+    str = stripVTControlCharacters(str);
     for (var i = 0, len = str.length; i < len; i++) {
       code = codePointAt(str, i);
       if (code >= 0x10000) { // surrogates
         i++;
+      }
+      if (code === 0x0a) { // new line \n
+        offset = 0;
+        row += 1;
+        continue;
       }
       if (isFullwidthCodePoint(code)) {
         if ((offset + 1) % col === 0) {
@@ -90,7 +90,7 @@ Interface.createInterface = function( opt ) {
       }
     }
     var cols = offset % col;
-    var rows = (offset - cols) / col;
+    var rows = row + (offset - cols) / col;
     return {cols: cols, rows: rows};
   };
 
@@ -107,3 +107,20 @@ Interface.createInterface = function( opt ) {
 
   return rl;
 };
+
+// Regexes used for ansi escape code splitting
+var metaKeyCodeReAnywhere = /(?:\x1b)([a-zA-Z0-9])/;
+var functionKeyCodeReAnywhere = new RegExp('(?:\x1b+)(O|N|\\[|\\[\\[)(?:' + [
+  '(\\d+)(?:;(\\d+))?([~^$])',
+  '(?:M([@ #!a`])(.)(.))', // mouse
+  '(?:1;)?(\\d+)?([a-zA-Z])'
+].join('|') + ')');
+
+/**
+ * Tries to remove all VT control characters. Use to estimate displayed
+ * string width. May be buggy due to not running a real state machine
+ */
+function stripVTControlCharacters (str) {
+  str = str.replace(new RegExp(functionKeyCodeReAnywhere.source, 'g'), '');
+  return str.replace(new RegExp(metaKeyCodeReAnywhere.source, 'g'), '');
+}
